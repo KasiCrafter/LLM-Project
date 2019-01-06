@@ -1,0 +1,77 @@
+[INI]
+-Using HTML5's native FileReader system, we can make our own custom INI file without needing messy permissions on the OS level.
+1.) This file will have instructions (in the form of comments and examples) of how to fill in variables.
+2.) These include: 
+	spritesheets (and their Rows x Columns as defined by the dev), 
+	character names(which will be IMPORTANT as these names will be used, in their text form, to retrieve and parse spritesheets and hitboxes),
+	global microgame rules/settings,
+	and various other settings that will make themselves known with time
+3.) Once input, the codebase will parse it using a custom function that impliments all the data into the appropriate references and 			variables. Which leads to...
+
+[Objects]
+-Objects describe a wide net, including sprite sheets, animations, assets, and characters. Their file names will play a CRITICAL part of how they are handled in the codebase.
+	1.) At load time, the codebase will see if all items defined in the INI exist and are valid.
+
+	2.) Objects will be stored by their prefix string in a dictionary/array/class(?), with said prefix being a character or background name.	Each keyed pair will contain all the file locations associated with that prefix, along with the hitbox data of said object.
+
+	3.) This will be done by using a regular expression to read the text before the ".png" or ".txt" stuffix of the image. If the regular		expression has a named key (as defined as a character in the INI), it is added under that character's collection.
+
+	4.) To access different spritesheets of the same character, the regular expression will also store whatever that is not the name prefix	 	 or file type suffix into it's own tag under the  prefix. (Example: "BunBun", "BunBunHeart.png", "BunBunMad.png, and 					"BunBunCollission.txt" would be stored as "bunbun" wih the sub sections "heart", "mad", and "collission", respectively. Instead of 		calling "BunBunCollission", just call selectAsset("BunBun","Collission"), which is a cleaner, more modular approach.)
+
+	5.) For subsections of subsections, the same applies recursively. (Example: "BunBun", "BunBunHeart.png", and "BunBunCollissions.txt") 		would be stores as "bunbun", with "heart" as a subsection of it, with "collissions" bring a subset of "heart". (Example: to call a 		specific collission map of BunBun, you'd call all parts of the tree by selectAsset("BunBun","Heart","Collission") instead).
+
+	6.) To call a specific frame of a sprite, the last parameter must be an integer at the end of the normal call. This works even for 			collission files. (Example: selectAsset("BunBun","Collissions", 2) or selectAsset("BunBun","Heart,3"). Calling collissions by frame 	is useful for animations that have changing hitboxes over time).
+
+	7.) Once an asset is selected with selectAsset, it is placed into a temporary holding variable. This variable is called on by various 		worker functions which take simple parameters. This is useful for minimizing code and speeding up workflow. [Watch out for timing 		bugs]	(Example: selectAsset("BunBun","Mad", 2); moveX(-30); advanceFrame(); setLoopsPerSec(3);   )
+
+	8.) It's also possible to move up in scope of the same asset base by using changeScope(). Simply type the name of the path you want to 		move to under the same prefix. (Ex: selectAsset("BunBun","Mad", 2); moveX(-30); changeScope("Heart", 5);)
+
+	9.) There are also the selectMulti() and the swapPrefix() commands. The former takes the arguments in arrays for each asset you want to 	select, in the same format as you'd call it with selectAsset(). This allows you to do the same operation on different assets.
+		(Example: selectMulti(["BunBun","Oww",0], ["Nidoran", "Oww", 2]); setLoopsPerSec(5);)
+		<Example with more human formatting:
+
+		selectMulti(
+
+		["BunBun","Oww",0], 
+		["Nidoran", "Oww", 2] 
+
+		);
+		setLoopsPerSec(5);  >
+
+		The dummyAsset() command allows you to specify a branch or sub branch without throwing an error. This function takes no prefix, so it's useful for iterating or sowing together different strings. Attempting to call a worker function with a dummyAsset selected will simply reselect the last properly selected asset.
+
+		selectAsset
+
+
+
+
+		The swapPrefix() command is relatively straightforward; while keeping the same subset tree as the previously selected asset, the name prefix is swapped for another. This makes for quick switching of different assets, less redundant code, and grants the ability to switch between similar assets were the order of operations matter. Fun with conditional loops!
+
+		selectAsset("BunBun", "Happy", "Collissions", 4)
+
+		for (i = 0; i < disaster.length; i++) {
+			if (!disaster[i].isOnFire) {
+				swapPrefix(disaster[i]);
+
+				setLoopsPerSec();
+			}
+
+		}
+
+
+[Ease of Access tools]
+
+
+
+
+
+
+
+
+
+[Collission]
+
+
+[Microgames]
+
+
