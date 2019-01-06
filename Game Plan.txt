@@ -8,7 +8,7 @@
 	and various other settings that will make themselves known with time
 3.) Once input, the codebase will parse it using a custom function that impliments all the data into the appropriate references and 			variables. Which leads to...
 
-[Objects]
+[Objects] (everything is case insensitive by the way; because artists hate picky spelling. same tbh)
 -Objects describe a wide net, including sprite sheets, animations, assets, and characters. Their file names will play a CRITICAL part of how they are handled in the codebase.
 	1.) At load time, the codebase will see if all items defined in the INI exist and are valid.
 
@@ -16,19 +16,21 @@
 
 	3.) This will be done by using a regular expression to read the text before the ".png" or ".txt" stuffix of the image. If the regular		expression has a named key (as defined as a character in the INI), it is added under that character's collection.
 
-	4.) To access different spritesheets of the same character, the regular expression will also store whatever that is not the name prefix	 	 or file type suffix into it's own tag under the  prefix. (Example: "BunBun", "BunBunHeart.png", "BunBunMad.png, and 					"BunBunCollission.txt" would be stored as "bunbun" wih the sub sections "heart", "mad", and "collission", respectively. Instead of 		calling "BunBunCollission", just call selectAsset("BunBun","Collission"), which is a cleaner, more modular approach.)
+	4.) To access different spritesheets of the same character, the regular expression will also store whatever that is not the name prefix	 	 or file type suffix into it's own tag under the  prefix. (Example: "BunBun", "BunBunHeart.png", "BunBunMad.png, and 					"BunBunHitboxes.txt" would be stored as "bunbun" wih the sub sections "heart", "mad", and "Hitboxes", respectively. Instead of 			calling "BunBunHitboxes", just call selectAsset("BunBun","Hitboxes"), which is a cleaner, more modular approach.)
 
-	5.) For subsections of subsections, the same applies recursively. (Example: "BunBun", "BunBunHeart.png", and "BunBunCollissions.txt") 		would be stores as "bunbun", with "heart" as a subsection of it, with "collissions" bring a subset of "heart". (Example: to call a 		specific collission map of BunBun, you'd call all parts of the tree by selectAsset("BunBun","Heart","Collission") instead).
+	5.) For subsections of subsections, the same applies recursively. (Example: "BunBun", "BunBunHeart.png", and "BunBunHitboxes.txt") 			would be stores as "bunbun", with "heart" as a subsection of it, with "Hitboxes" bring a subset of "heart". (Example: to call a 		specific Hitboxes map of BunBun, you'd call all parts of the tree by selectAsset("BunBun","Heart","Hitboxes") instead).
 
-	6.) To call a specific frame of a sprite, the last parameter must be an integer at the end of the normal call. This works even for 			collission files. (Example: selectAsset("BunBun","Collissions", 2) or selectAsset("BunBun","Heart,3"). Calling collissions by frame 	is useful for animations that have changing hitboxes over time).
+	6.) To call a specific frame of a sprite, the last parameter must be an integer at the end of the normal call. This works even for 			Hitboxes files. (Example: selectAsset("BunBun","Hitboxes", 2) or selectAsset("BunBun","Heart,3"). Calling Hitboxess by frame 			is useful for animations that have changing hitboxes over time).
 
 	7.) Once an asset is selected with selectAsset, it is placed into a temporary holding variable. This variable is called on by various 		worker functions which take simple parameters. This is useful for minimizing code and speeding up workflow. [Watch out for timing 		bugs]	(Example: selectAsset("BunBun","Mad", 2); moveX(-30); advanceFrame(); setLoopsPerSec(3);   )
 
-	8.) It's also possible to move up in scope of the same asset base by using changeScope(). Simply type the name of the path you want to 		move to under the same prefix. (Ex: selectAsset("BunBun","Mad", 2); moveX(-30); changeScope("Heart", 5);)
+	8.) It's also possible to move up in scope of the same asset base by using swapSuffix(). Simply type the name of the path you want to 		move to under the same prefix. (Ex: selectAsset("BunBun","Mad", 2); moveX(-30); swapSuffix("Heart", 5);)
 
-	9.) There are also the selectMulti() and the swapPrefix() commands. The former takes the arguments in arrays for each asset you want to 	select, in the same format as you'd call it with selectAsset(). This allows you to do the same operation on different assets.
+	9.) There are also the selectMulti(). The function accepts its arguments in the form of arrays. For each asset you want to select, input 	the same arguments in the same order you'd call with selectAsset(). This allows you to do the same operation on different assets.
+
 		(Example: selectMulti(["BunBun","Oww",0], ["Nidoran", "Oww", 2]); setLoopsPerSec(5);)
-		<Example with more human formatting:
+
+		<Example with more human formatting:>
 
 		selectMulti(
 
@@ -36,28 +38,87 @@
 		["Nidoran", "Oww", 2] 
 
 		);
-		setLoopsPerSec(5);  >
-
-		The dummyAsset() command allows you to specify a branch or sub branch without throwing an error. This function takes no prefix, so it's useful for iterating or sowing together different strings. Attempting to call a worker function with a dummyAsset selected will simply reselect the last properly selected asset.
-
-		selectAsset
+		setLoopsPerSec(5);  
 
 
+		The selectDummy() command allows you to specify a branch or sub branch without throwing an error. This function takes no prefix, so it's useful for iterating or sowing together different strings. Attempting to call a worker function with a selectDummy selected    will simply "freeze" worker functions until a prefix is selected. At that point, all the operations done on the dummy will instead be instantly applied to the new, prefixed asset.
+
+		The swapPrefix() command is relatively straightforward; while keeping the same subset tree as the previously selected asset, the name prefix is swapped for another. This makes for quick switching of different assets, less redundant code, and grants the ability to switch between similar assets where the order of operations matter. Fun with conditionals!
 
 
-		The swapPrefix() command is relatively straightforward; while keeping the same subset tree as the previously selected asset, the name prefix is swapped for another. This makes for quick switching of different assets, less redundant code, and grants the ability to switch between similar assets were the order of operations matter. Fun with conditional loops!
+		selectAsset("Didi","Chatter",0);
+		moveXY(10, -50);
+		setLoopsPerSecond(30);
 
-		selectAsset("BunBun", "Happy", "Collissions", 4)
+		selectDummy("Heart", 5);
 
-		for (i = 0; i < disaster.length; i++) {
-			if (!disaster[i].isOnFire) {
-				swapPrefix(disaster[i]);
+		setLoopsPerSec(2); <----- Didi is no longer selected here. This operation will not go into effect until it gets a prefix.
 
-				setLoopsPerSec();
-			}
+		if (points > 5) {
+			swapPrefix("BunBun");
+		}
+		else {
+			swapPrefix("Andy");
+		}	
 
+		^-------Once either select function is called, its prefix will instantly replace the selected Dummy asset while keeping all the 			modifications made to it. In this example, it could be either ("Andy","Heart", 5) or ("BunBun", "Heart", 5). Whichever is 			selected will also gain the loop speed of 2 per second, as defined before the conditional. NOTE, the application of effects 		is INSTANT. Therfore you should declare time sensitive operations only AFTER the dummy asset is replaced. You must also be 			careful if the reffered frame number is out of bounds, as the error will only happen at the time of prefix assignment instead 		  of the invocation of selectDummy.
+
+
+
+		Also useful are the holdAsset(), recallAsset(), and deselectAsset() functions. The first two, when used in conjunction, will keep the currently selected asset for later use, while the other retrieves that asset, respectively. while recallAsset() is functionally the same as selectAsset(), holdAsset() deselects the current selection altogether, leaving you with no selected asset. This is useful when you need to use a derived asset name, but also have to select and modify assets in ways your current asset won't like. deselectAsset() erases the reference to your currently selected asset, but it is not saved for later use.
+
+
+		selectAsset("BunBun", "Hitboxes", 0);
+
+		for (e = 0; e < 3; e++) {
+			var random1 = Math.floor(Math.random(1,3) * 100);
+			var random2 = Math.floor(Math.random(1,9) * 100);
+
+			setFrame(random1);
+			setLoopsPerSecond(random2);
 		}
 
+		holdAsset();
+
+		selectAsset("Crosshair","Flash",0);
+		setLoopsPerSecond(1);
+
+		recallAsset();
+
+
+
+		^-----Don't ask, I don't get it either. I was going for BunBun moving fast while the player needs to hit a random point like some 		pin the tail on the donkey shenanigans but ehhhh.
+
+
+		selectAsset("Prefix", [...Any amount of suffixes], frameInteger)
+		selectMulti([same format as in SelectAsset],[some number of similar selectAsset parameters],)
+		selectDummy(any amount of valid suffixes with no prefixes)
+		holdAsset(no arguments, removes pointer from global variable and places it to a temporary one. can only hold 1)
+		recallAsset(no arguments, selects saved asset while erasing the current and saved asset references)
+		deselectAsset(no arguments. not sure what you're expecting; nly erases currently selected reference)
+
+		setFrame()
+		advanceFrame(integer#ofFramesToAdvance,default1)
+		setLoopSpeed(amountOfTimesLoopWillPlayPerSecond)
+		stop(empty function. stops all X Y movement and halts animation)
+
+		swapPrefix(changes the name tag for the object while keeping the frame data untouched to select another asset)
+		SwapSuffix(keeps name tag, but reference for frame data changes to another subsection of the asset)
+
+		setX()
+		setY()
+		setXY(x,y)
+		nudgeX()
+		nudgeY()
+		nudgeXY()
+		setSpeedX()
+		SetSpeedY()
+		SetSpeedXY()
+
+		exit(leave current game state)
+
+
+[Hitboxes]
 
 [Ease of Access tools]
 
@@ -69,7 +130,7 @@
 
 
 
-[Collission]
+
 
 
 [Microgames]
