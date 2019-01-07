@@ -123,6 +123,14 @@
 
 
 [Ease of Access tools]
+HitboxMaker:
+-Click and drag to make translucent box. While held down, follow the cursor. When up, complete the box.
+-Spress Space to commit
+-Enter hitbox name
+-Hit space again to commit name
+-hitbox and name show up on list, hitbox lighter
+-modes:[select][delete][move][edit][Next][Prev][Export][Onion Toggle][Play](speed adjuster)(animation anchor for loop frame #)
+-
 
 SpriteObject structure:
 [
