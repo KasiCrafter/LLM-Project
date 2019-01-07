@@ -16,11 +16,11 @@
 
 	3.) This will be done by using a regular expression to read the text before the ".png" or ".txt" stuffix of the image. If the regular		expression has a named key (as defined as a character in the INI), it is added under that character's collection.
 
-	4.) To access different spritesheets of the same character, the regular expression will also store whatever that is not the name prefix	 	 or file type suffix into it's own tag under the  prefix. (Example: "BunBun", "BunBunHeart.png", "BunBunMad.png, and 					"BunBunHitboxes.txt" would be stored as "bunbun" wih the sub sections "heart", "mad", and "Hitboxes", respectively. Instead of 			calling "BunBunHitboxes", just call selectAsset("BunBun","Hitboxes"), which is a cleaner, more modular approach.)
+	4.) To access different spritesheets of the same character, the regular expression will also store whatever that is not the name prefix	 	 or file type suffix into it's own tag under the  prefix. (Example: "BunBun", "BunBunHeart.png", "BunBunMad.png, and 					"BunBunHitboxes.txt" would be stored as "bunbun" wih the sub sections "heart", "mad", and "hitboxes", respectively. Instead of 			calling "BunBunHitboxes", just call selectAsset("BunBun","hitboxes"), which is a cleaner, more modular approach.)
 
-	5.) For subsections of subsections, the same applies recursively. (Example: "BunBun", "BunBunHeart.png", and "BunBunHitboxes.txt") 			would be stores as "bunbun", with "heart" as a subsection of it, with "Hitboxes" bring a subset of "heart". (Example: to call a 		specific Hitboxes map of BunBun, you'd call all parts of the tree by selectAsset("BunBun","Heart","Hitboxes") instead).
+	5.) For subsections of subsections, the same applies recursively. (Example: "BunBun", "BunBunHeart.png", and "BunBunHitboxes.txt") 			would be stores as "bunbun", with "heart" as a subsection of it, with "hitboxes" bring a subset of "heart". (Example: to call a 		specific hitbox map of BunBun, you'd call the specific branch by selectAsset("BunBun","Heart","Hitboxes") instead).
 
-	6.) To call a specific frame of a sprite, the last parameter must be an integer at the end of the normal call. This works even for 			Hitboxes files. (Example: selectAsset("BunBun","Hitboxes", 2) or selectAsset("BunBun","Heart,3"). Calling Hitboxess by frame 			is useful for animations that have changing hitboxes over time).
+	6.) To call a specific frame of a sprite, the last parameter must be an integer at the end of the normal call. This works even for 			hitbox files. (Example: selectAsset("BunBun","Hitboxes", 2) or selectAsset("BunBun","Heart,3"). Calling Hitboxess by frame 				is useful for animations that have changing hitboxes over time).
 
 	7.) Once an asset is selected with selectAsset, it is placed into a temporary holding variable. This variable is called on by various 		worker functions which take simple parameters. This is useful for minimizing code and speeding up workflow. [Watch out for timing 		bugs]	(Example: selectAsset("BunBun","Mad", 2); moveX(-30); advanceFrame(); setLoopsPerSec(3);   )
 
@@ -61,7 +61,7 @@
 			swapPrefix("Andy");
 		}	
 
-		^-------Once either select function is called, its prefix will instantly replace the selected Dummy asset while keeping all the 			modifications made to it. In this example, it could be either ("Andy","Heart", 5) or ("BunBun", "Heart", 5). Whichever is 			selected will also gain the loop speed of 2 per second, as defined before the conditional. NOTE, the application of effects 		is INSTANT. Therfore you should declare time sensitive operations only AFTER the dummy asset is replaced. You must also be 			careful if the reffered frame number is out of bounds, as the error will only happen at the time of prefix assignment instead 		  of the invocation of selectDummy.
+		^-------Once either select function is called, its prefix will instantly replace the selected Dummy asset while keeping all the 			modifications made to it. In this example, it could be either ("Andy","Heart", 5) or ("BunBun", "Heart", 5). Whichever is 			selected will also gain the loop speed of 2 per second, as defined before the conditional. NOTE, the application of effects 		is INSTANT. Therfore you should declare time sensitive operations only AFTER the dummy asset is replaced. You must also be 			careful if the reffered frame number is out of bounds, as the error will only happen at the time of prefix assignment 				instead of the invocation of selectDummy.
 
 
 
@@ -119,20 +119,43 @@
 
 
 [Hitboxes]
+-Since the nature of the game is VERY flexable and interactive
+
 
 [Ease of Access tools]
 
+SpriteObject structure:
+[
+name =
+imageSource =
+numFrames =
+currFrame =
+doLoop =
+loopSpeed =
+loopAnchor =
+deadlineTime =
+xpos =
+ypos =
+xSpeed =
+ySpeed =
+]
 
-
-
-
-
-
-
-
+Hitbox Object structure :
+[
+name =
+imageSource =
+width =
+height =
+relativeX =
+relatieY =
+isVisible =
+]
 
 
 
 [Microgames]
-
+-Using exposed global functions that be called from the main game loop, microgames can be easily modified, added, removed, and duplicated.
+1.) Each microgame will be its own file dedicated JUST for that specific game. The only code allowed to be shared across multiple microgames 	 are global methods and variables.
+2.) All microgames will have at least six functions: init(), play(), check(), win(), lose(), and meh()
+	-init(), code to be run only once as the game is setting up to be played. Assets are called/loaded, variables are reset and modified.
 
