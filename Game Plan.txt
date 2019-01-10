@@ -253,3 +253,4 @@ isVisible =
 	    States how many animation loops we require. This can be replaced with a number for a more specific loop count.
 5.) Each frame is being animated in parallel, all with the same start, duration, and end times. keyTime is a PROPORTIONAL count of the frames out of 1. Think of it as percents instead of decimals. Decimals MUST start with 0. "0.34".
 6.) When running the game, it's best to call the SVG script as a "src" file since it will be much MUCH too large.
+7.) Use SVG groups "<g></g>" tags to make layers once assembled. REMEMBER THE SYSTEM IS FILO, whatever is put on the list first will be the last thing drawn! To have something on the topmost layer, it must be at the at the BOTTOM of the SVG/SML file
