@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<meta charset="utf-8" />
+	<head>
+	  <title></title>
+	</head>
+
+	<style type="text/css">
+
+	svg {  
+	  position: absolute;
+	  left: 50%;
+	  top: 50%;
+	  transform: translate(-50%, -50%);
+
+	  width: 60%;
+	  height: 80%;
+	}
+	</style>
+
+	<body>
+		<svg xmlns="http://www.w3.org/2000/svg" width="500px" height="500px" viewBox="-5 -5 500 400" preserveAspectRatio="xMaxYMax meet">
+
+			<image 
+				width=90% height=90%
+			    href="vtr1ndo.svg">
+			    <title>My image</title>
+			    <animate
+			      id="frame1"
+					attributeName="display"
+					values="inline;none;none"
+					keyTimes="0;0.5;1"
+					dur="0.3s"
+					begin="0s"
+					repeatCount="indefinite" />
+			</image>
+
+			<image  
+				width="90%" height="90%" 
+				href="vtr2ndo.svg">
+
+			<animate
+				id="frame2"
+				attributeName="display"
+				values="none;inline;none"
+				keyTimes="0;0.5;1"
+				dur="0.3s"
+				begin="0s"
+				repeatCount="indefinite" />
+			</image>
+		</svg>
+	</body>
+</html>

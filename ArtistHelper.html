@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <script>
+    var create = document.createElement("button"),
+    createText = document.createTextNode("Generate File");
+    create.type = "button";
+    create.appendChild(createText);
+
+    var link = document.createElement("a"),
+    linkText = document.createTextNode("Download");
+    link.download = "info.txt";
+    link.style = "display: none";
+    link.appendChild(linkText);
+
+    var body = document.getElementsByTagName("body")[0];
+    body.appendChild(create);
+    body.appendChild(link);
+
+    (function () {
+    var textFile = null,
+      makeTextFile = function (text) {
+        var data = new Blob([text], {type: 'text/plain'});
+
+        // If we are replacing a previously generated file we need to
+        // manually revoke the object URL to avoid memory leaks.
+        if (textFile !== null) {
+          window.URL.revokeObjectURL(textFile);
+        }
+
+        textFile = window.URL.createObjectURL(data);
+        return textFile;
+      };
+
+      create.addEventListener('click', function () {
+        link.href = makeTextFile("bop");
+        link.style.display = 'block';
+      }, false);
+
+        link.addEventListener('click', function () {
+        link.style.display = 'none';
+      }, false);
+
+    })();
+    </script>
+  </body>
+</html>
+
+
