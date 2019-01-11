@@ -1,0 +1,29 @@
+<!-- Learn about this code on MDN: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/preserveAspectRatio -->
+
+<svg viewBox="-20 -20 1000 1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+     <path id="smiley" d="M50,10 A40,40,1,1,1,50,90 A40,40,1,1,1,50,10 M30,40 Q36,35,42,40 M58,40 Q64,35,70,40 M30,60 Q50,75,70,60 Q50,75,30,60" />
+  </defs>
+ 
+  <!-- (width>height) meet -->
+  <rect width="200" height="100" fill="solid" stroke="black" stroke-width="10">
+  </rect>
+  <svg  >
+    <use href="#smiley" />
+  </svg>
+</svg>
+
+
+
+path {
+  fill: yellow;
+  stroke: black;
+  stroke-width: 8px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+rect:hover, rect:active {
+  outline: 10px solid red;
+}
