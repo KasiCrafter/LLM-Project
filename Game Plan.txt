@@ -130,7 +130,19 @@ HitboxMaker:
 -Hit space again to commit name
 -hitbox and name show up on list, hitbox lighter
 -modes:[select][delete][move][edit][Next][Prev][Export][Onion Toggle][Play](speed adjuster)(animation anchor for loop frame #)
--
+
+QOL: 
+Darj/Light Mode toggles (keep out eyes from seering, maybe add a gradual effect to it so we don't go blind from dark int light)
+
+Animation Stitcher:
+-Areas to fill out (and preview) the effects of the SpriteObject in real time using textbox HTML objects
+-One button below the list that has [Apply], which will update the XML invisibly.
+-The XML object being manipulated will be based off a template which will be read and stored as a string. Using Javascript and conditionals, append and remove tags and values from it. (Use FileReader readAsText() and local href to the current HTML page via <script> to run it).
+-The stitcher will also have the ability to take seperate, single frame vector SVGs, and load them all into one "sheet", setting the visibilities of them programatically.
+-Once complete, the XML code can be generated and downloaded locally.
+-You will also be able to load up old animation XML files (gotta watch out for missing or displaced files).
+
+[Object Structures]
 
 SpriteObject structure:
 [
@@ -253,4 +265,7 @@ isVisible =
 	    States how many animation loops we require. This can be replaced with a number for a more specific loop count.
 5.) Each frame is being animated in parallel, all with the same start, duration, and end times. keyTime is a PROPORTIONAL count of the frames out of 1. Think of it as percents instead of decimals. Decimals MUST start with 0. "0.34".
 6.) When running the game, it's best to call the SVG script as a "src" file since it will be much MUCH too large.
-7.) Use SVG groups "<g></g>" tags to make layers once assembled. REMEMBER THE SYSTEM IS FILO, whatever is put on the list first will be the last thing drawn! To have something on the topmost layer, it must be at the at the BOTTOM of the SVG/SML file
+7.) Use SVG groups "<g></g>" tags to make layers once assembled. REMEMBER THE SYSTEM IS FILO, whatever is put on the list first will be the last thing drawn! To have something on the topmost layer, it must be at the at the BOTTOM of the SVG/SML file.
+
+
+
