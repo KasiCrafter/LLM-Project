@@ -135,7 +135,7 @@ QOL:
 Darj/Light Mode toggles (keep out eyes from seering, maybe add a gradual effect to it so we don't go blind from dark int light)
 
 Animation Stitcher:
--Areas to fill out (and preview) the effects of the SpriteObject in real time using textbox HTML objects
+-Areas to fill out (and preview) the effects of the SpriteObject in real time using textarea(?) HTML objects
 -One button below the list that has [Apply], which will update the XML invisibly.
 -The XML object being manipulated will be based off a template which will be read and stored as a string. Using Javascript and conditionals, append and remove tags and values from it. (Use FileReader readAsText() and local href to the current HTML page via <script> to run it).
 -The stitcher will also have the ability to take seperate, single frame vector SVGs, and load them all into one "sheet", setting the visibilities of them programatically.

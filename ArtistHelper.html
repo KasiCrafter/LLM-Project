@@ -5,20 +5,56 @@
   </head>
   <body>
     <script>
-    var create = document.createElement("button"),
-    createText = document.createTextNode("Generate File");
-    create.type = "button";
-    create.appendChild(createText);
+    var create = document.createElement("button");
+    select = document.createElement("button"), 
+    remove = document.createElement("button"), 
+    move = document.createElement("button"), 
+    edit = document.createElement("button"), 
+    forward = document.createElement("button"), 
+    backward = document.createElement("button"), 
+    preview = document.createElement("button"),
+    link = document.createElement("a");
 
-    var link = document.createElement("a"),
+    var createText = document.createTextNode("Generate File"),
+    selectText = document.createTextNode("Select"),
+    removeText = document.createTextNode("Delete"),
+    moveText = document.createTextNode("Move"),
+    editText = document.createTextNode("Edit"),
+    forwardText = document.createTextNode("Next"),
+    backwardText = document.createTextNode("Previous"),
+    previewText = document.createTextNode("Play"),
     linkText = document.createTextNode("Download");
-    link.download = "info.txt";
-    link.style = "display: none";
+
+    create.appendChild(createText);
+    select.appendChild(selectText);
+    remove.appendChild(removeText);
+    move.appendChild(moveText);
+    edit.appendChild(editText);
+    forward.appendChild(forwardText);
+    backward.appendChild(backwardText);
+    preview.appendChild(previewText);
     link.appendChild(linkText);
 
     var body = document.getElementsByTagName("body")[0];
     body.appendChild(create);
     body.appendChild(link);
+    body.appendChild(select);
+    body.appendChild(remove);
+    body.appendChild(move);
+    body.appendChild(edit);
+    body.appendChild(forward);
+    body.appendChild(backward);
+    body.appendChild(preview);
+
+    create.type = "button";
+    link.download = "info.txt";
+    link.style = "display: none";
+    select.type = remove.type = move.type = edit.type = forward.type = backward.type = preview.type = create.type;
+
+
+
+
+
 
     (function () {
     var textFile = null,
